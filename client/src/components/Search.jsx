@@ -5,7 +5,6 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchMovies: [],
             input: ''
         }
 
@@ -15,29 +14,23 @@ class Search extends React.Component {
     }
 
     handleChange(event) {
-        var data = this.props.movies;
         this.setState({input: event.target.value})
       }
     
     handleSubmit(event) {
     event.preventDefault();
-    var data = this.props.movies;
-    var searched = data.filter((movie) => {
-        return movie.title.includes(this.state.input);
-    })
-    this.setState({searchMovies: searched})
-    console.log(this.state.searchMovies);
+    this.props.searchedMovies(this.state.input);
     }
 
     render() {
         return (
-        <form>
+        <form onSubmit={this.handleSubmit}>
             <label>
                 <input type='text' 
                 value={this.state.input}
                 onChange={this.handleChange}/>
             </label>
-            <button onClick={this.handleSubmit}>Go!</button>
+            <button>Go!</button>
         </form>
 
         )
