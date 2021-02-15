@@ -2,6 +2,7 @@ import React from 'react';
 import MovieData from '../MovieData.js';
 import MovieList from './MovieList.jsx';
 import Search from './Search.jsx';
+import Add from './Add.jsx';
 
 
 
@@ -10,7 +11,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       movies: MovieData,
-      inputMovies: []
+      inputMovies: [],
+      addedMovies: [],
+      searched: false
     }
 
     this.searchedMovies = this.searchedMovies.bind(this);
@@ -18,35 +21,56 @@ class App extends React.Component {
   }
 
   addMovies(event) {
+    var movie = {
+      title: event
+    };
+
+  
+
 
   }
 
   searchedMovies(event) {
-    var filtered = [];
     var data = this.state.movies;
-    var searched = data.filter((movie) => {
+    var inputMovie = data.filter((movie) => {
         return movie.title.includes(event);
     })
-    for (var i = 0; i < searched.length; i++) {
-      filtered.push(searched[i].title);
-    }
-    this.setState({inputMovies: filtered})
-    console.log(this.state.inputMovies);
+    this.setState({
+      movies: this.state.movies, 
+      inputMovies: inputMovie, 
+      searched: !this.state.searched})
   }
 
+  switchMovies() {
+    if (this.state.searched) {
+      return (
+        <div>
+          <MovieList 
+          movies={this.state.inputMovies}/>
+        </div>
+      )
+    } else{
+      return (
+        <div>
+          <MovieList 
+          movies={this.state.movies}/>
+        </div>
+      )
+    }
+  }
 
   render() {
     return (
       <div className="movie-list">
         <h1>Movie List</h1>
         <div>
+          <Add />
+        </div>
+        <div>
           <Search 
           movies={this.state.movies} searchedMovies={this.searchedMovies}/>
         </div>
-        <div>
-          <MovieList 
-          movies={this.state.movies}/>
-        </div>
+        {this.switchMovies()}
       </div>
 
     )
