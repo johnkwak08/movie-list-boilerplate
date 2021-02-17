@@ -15,7 +15,10 @@ class App extends React.Component {
       addInput: '',
       inputMovies: [],
       addedMovies: [],
-      searched: false
+      searched: false, 
+      watched: [], 
+      toWatch: [],
+      watchedIsSelected: false
       
     }
 
@@ -25,6 +28,8 @@ class App extends React.Component {
     this.handleAddChange = this.handleAddChange.bind(this);
     this.handleAddSubmit = this.handleAddSubmit.bind(this);
     this.addMovies = this.addMovies.bind(this);
+    this.onToWatchedClick = this.onToWatchedClick.bind(this);
+    this.onWatchedClick = this.onWatchedClick.bind(this);
     
 
   }
@@ -46,7 +51,6 @@ class App extends React.Component {
     event.preventDefault();
     this.addMovies(this.state.addInput);
   }
-
 
 
 
@@ -81,18 +85,69 @@ class App extends React.Component {
           movies={this.state.inputMovies}/>
         </div>
       )
-    } else{
+    } else if (this.state.watchedIsSelected) {
       return (
         <div>
           <MovieList 
-          movies={this.state.movies}
-          />
+          movies={this.state.watched}/>
         </div>
-      )
-    }
+      ) 
+    } else {
+        return (
+          <div>
+            <MovieList 
+            movies={this.state.movies}
+            onToWatchedClick={this.onToWatchedClick}
+            />
+          </div>
+        )
+      }
+      
   }
 
+  onToWatchedClick(movie) {
+    var data = this.state.movies;
+    var watchedArr = [];
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].watched === true) {
+          if (watchedArr[data[i].title] === undefined) {
+            watchedArr.push(data[i]);
+            this.setState({watched: watchedArr})
+        }
+      }
+    }
+    console.log('watched' , this.state.watched);
+    return (
+      <div>
+          <MovieList 
+          movies={this.state.watched}/>
+      </div>
+    )
+  }
 
+  onWatchedClick() {
+    var data = this.state.movies;
+    var toWatchedArr = [];
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].watched === true) {
+          if (toWatchedArr[data[i].title] === undefined) {
+            toWatchedArr.push(data[i]);
+            this.setState({toWatch: toWatchedArr})
+            
+      }
+      }
+    }
+    this.setState({watchedIsSelected: !this.state.watchedIsSelected})
+    console.log('towatch' , this.state.toWatch);
+    // return (
+    //   <div>
+    //       <MovieList 
+    //       movies={this.state.toWatch}/>
+    //   </div>
+    // )
+
+  }
+  
   
   render() {
     return (
@@ -110,8 +165,8 @@ class App extends React.Component {
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}/>
         </div>
-        <button>Watched</button>
-        <button>To Watch</button>
+        <button onClick={this.onWatchedClick}>Watched</button>
+        <button onClick={() => this.onToWatchedClick()}>To Watch</button>
         {this.switchMovies()}
       </div>
 

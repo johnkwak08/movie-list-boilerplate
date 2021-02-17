@@ -4,19 +4,24 @@ class MovieItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isToggleOn: 'To watch'
-            
-
+            isToggleOn: 'To watch',
         }
 
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick() {
-        var clicked = this.state.isToggleOn == 'To Watch' ? 'Watched' : 'To Watch'
-        console.log(clicked);
+        var clicked = this.state.isToggleOn === 'Watched' ? 'To Watch' : 'Watched'
         this.setState({isToggleOn: clicked})
-      }
+        if (clicked === 'To Watch') {
+            this.props.movie.watched = false;
+        } 
+        if (clicked === 'Watched') {
+            this.props.movie.watched = true;
+        }
+        this.props.onToWatchedClick(this.props.movie);
+
+    }
 
     render() {
         return(
@@ -26,7 +31,6 @@ class MovieItem extends React.Component {
                     {this.state.isToggleOn}
                 </button> 
             </div>  
-        
         )
     }
 
