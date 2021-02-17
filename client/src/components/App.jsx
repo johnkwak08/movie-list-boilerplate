@@ -18,7 +18,8 @@ class App extends React.Component {
       searched: false, 
       watched: [], 
       toWatch: [],
-      watchedIsSelected: false
+      watchedIsSelected: false,
+      toWatchedIsSelected: false
       
     }
 
@@ -86,18 +87,19 @@ class App extends React.Component {
         </div>
       )
     } else if (this.state.watchedIsSelected) {
-      return (
-        <div>
-          <MovieList 
-          movies={this.state.watched}/>
-        </div>
-      ) 
+        return (
+          <div>
+            <MovieList 
+            movies={this.state.watched}/>
+          </div>
+        ) 
     } else {
         return (
           <div>
             <MovieList 
             movies={this.state.movies}
-            onToWatchedClick={this.onToWatchedClick}
+            // onToWatchedClick={this.onToWatchedClick}
+            // onWatchedClick={this.onWatchedClick}
             />
           </div>
         )
@@ -105,8 +107,12 @@ class App extends React.Component {
       
   }
 
-  onToWatchedClick(movie) {
+  onWatchedClick(movie) {
     var data = this.state.movies;
+    // var toWatchedMovie = data.filter((movie) => {
+    //   return movie.watched.includes(true);
+    // })
+    // this.setState({watched: toWatchedMovie})
     var watchedArr = [];
     for (var i = 0; i < data.length; i++) {
       if (data[i].watched === true) {
@@ -116,29 +122,33 @@ class App extends React.Component {
         }
       }
     }
+    this.setState({watchedIsSelected: !this.state.watchedIsSelected})
     console.log('watched' , this.state.watched);
-    return (
-      <div>
-          <MovieList 
-          movies={this.state.watched}/>
-      </div>
-    )
+    // return (
+    //   <div>
+    //       <MovieList 
+    //       movies={this.state.watched}/>
+    //   </div>
+    // )
   }
 
-  onWatchedClick() {
+  onToWatchedClick(movie) {
     var data = this.state.movies;
+    // var toWatchedMovie = data.filter((movie) => {
+    //   return movie.watched.includes(false);
+    // })
+    // this.setState({toWatch: toWatchedMovie})
     var toWatchedArr = [];
     for (var i = 0; i < data.length; i++) {
-      if (data[i].watched === true) {
+      if (data[i].watched === false) {
           if (toWatchedArr[data[i].title] === undefined) {
             toWatchedArr.push(data[i]);
             this.setState({toWatch: toWatchedArr})
-            
-      }
+          }
       }
     }
-    this.setState({watchedIsSelected: !this.state.watchedIsSelected})
-    console.log('towatch' , this.state.toWatch);
+    this.setState({watchedIsSelected: !this.state.toWatchedIsSelected})
+    console.log('to watched' , this.state.toWatch);
     // return (
     //   <div>
     //       <MovieList 
@@ -166,7 +176,7 @@ class App extends React.Component {
           handleSubmit={this.handleSubmit}/>
         </div>
         <button onClick={this.onWatchedClick}>Watched</button>
-        <button onClick={() => this.onToWatchedClick()}>To Watch</button>
+        <button onClick={this.onToWatchedClick}>To Watch</button>
         {this.switchMovies()}
       </div>
 

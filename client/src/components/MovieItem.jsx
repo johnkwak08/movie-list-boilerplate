@@ -19,7 +19,8 @@ class MovieItem extends React.Component {
         if (clicked === 'Watched') {
             this.props.movie.watched = true;
         }
-        this.props.onToWatchedClick(this.props.movie);
+        // this.props.onToWatchedClick(this.props.movie);
+        // this.props.onWatchedClick(this.props.movie);
 
     }
 
