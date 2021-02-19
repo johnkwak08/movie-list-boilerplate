@@ -32,6 +32,7 @@ class App extends React.Component {
     this.addMovies = this.addMovies.bind(this);
     this.onToWatchedClick = this.onToWatchedClick.bind(this);
     this.onWatchedClick = this.onWatchedClick.bind(this);
+    this.getMovies = this.getMovies.bind(this);
     
 
   }
@@ -44,16 +45,18 @@ class App extends React.Component {
   getMovies() {
     axios.get('https://api.themoviedb.org/3/movie/550?api_key=bbda037578a13e86f5992dc17d514e75')
       .then((response) => {
-        console.log('Completed', response);
-        console.log(response.data.release_date);
-        // get the response
-        // then map through each object that we receive
-        const newMovies = this.state.movies.map((movie) => 
-          movie.release_date, 
-
+        const movies = this.state.movies;
+        const newMovies = movies.map((item) => {
+          let movie = {...item}; 
+          movie.title = response.data.title
+          movie.watched = false
+          movie.year = response.data.release_date 
+          movie.runtime = response.data.runtime
+          movie.rating = response.data.vote_average 
+          return movie;
+        }
         )
-        // creating a new array of objects containing only key value pairs we need 
-        // setState to new array 
+        this.setState({movies: newMovies})
       })
       .catch((err) => {
         console.log('Error', err);
@@ -103,7 +106,7 @@ class App extends React.Component {
       searched: !this.state.searched})
   }
 
-  onWatchedClick(movie) {
+  onWatchedClick(event) {
     var data = this.state.movies;
     var watchedMovie = data.filter((movie) => {
       return movie.watched === true;
@@ -114,7 +117,7 @@ class App extends React.Component {
     console.log('watched' , this.state.watched);
   }
 
-  onToWatchedClick(movie) {
+  onToWatchedClick(event) {
     var data = this.state.movies;
     var toWatchedMovie = data.filter((movie) => {
       return movie.watched === false;

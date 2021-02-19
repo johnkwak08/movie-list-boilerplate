@@ -1,5 +1,4 @@
 import React from 'react';
-import MovieDetails from './MovieDetails.jsx';
 
 class MovieItem extends React.Component {
     constructor(props) {
