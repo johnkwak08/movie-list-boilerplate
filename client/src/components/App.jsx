@@ -76,7 +76,11 @@ class App extends React.Component {
   }
 
   addMovies(movie) {
-    axios.post('/api/movies', movie)
+    console.log('addMovies post req: ', movie);
+    const newMovie = {
+      title: movie 
+    }
+    axios.post('/api/movies', newMovie)
       .then(() => 
         this.getServerMovies()
       )
@@ -130,6 +134,7 @@ class App extends React.Component {
 
   onWatchedClick(event) {
     var data = this.state.movies;
+    console.log(data);
     var watchedMovie = data.filter((movie) => {
       return movie.watched === 1;
     })

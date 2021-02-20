@@ -15,27 +15,31 @@ app.get('/api/movies', (req, res) => {
     if (err) {
       console.log('Server get request error', err); 
     } else {
+      console.log('get results', results);
       res.send(results)
     }
   })
 })
 
 app.post('/api/movies', (req, res) => {
-  const { id, title, watched, year, runtime, rating } = req.body;
-  const sqlString = 'INSERT INTO movielist (id, title, watched, year, runtime, rating) VALUE (?, ?, ?, ?, ?, ?)'
-  db.query(sqlString, [id, title, watched, year, runtime, rating], (err, results) => {
+  console.log(req.body);
+  const { title, watched, year, runtime, rating } = req.body;
+  const sqlString = 'INSERT INTO movielist (title, watched, year, runtime, rating) VALUE (?, ?, ?, ?, ?)'
+  db.query(sqlString, [title, watched, year, runtime, rating], (err, results) => {
     if (err) {
+      console.log('server post req', err);
       res.sendStatus(400);
     } else {
+      console.log('server res', results);
       res.sendStatus(201);
     }
   })
 })
 
-app.post('/api/movies', (req, res) => {
-  res.sendStatuts(201);
-  res.send('hello world')
-})
+// app.post('/api/movies', (req, res) => {
+//   res.sendStatuts(201);
+//   res.send('hello world')
+// })
 
 
 app.listen(PORT, () => {
