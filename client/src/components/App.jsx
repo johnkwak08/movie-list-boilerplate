@@ -11,7 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      movies: MovieData,
+      movies: [],
       searchInput: '',
       addInput: '',
       inputMovies: [],
@@ -32,34 +32,56 @@ class App extends React.Component {
     this.addMovies = this.addMovies.bind(this);
     this.onToWatchedClick = this.onToWatchedClick.bind(this);
     this.onWatchedClick = this.onWatchedClick.bind(this);
-    this.getMovies = this.getMovies.bind(this);
+    //this.getMovies = this.getMovies.bind(this);
+    //this.getServerMovies = this.getServerMovies.bind(this);
     
 
   }
 
   componentDidMount() {
-    this.getMovies();
+    this.getServerMovies();
+    // this.getMovies();
     
   }
   
-  getMovies() {
-    axios.get('https://api.themoviedb.org/3/movie/550?api_key=bbda037578a13e86f5992dc17d514e75')
-      .then((response) => {
-        const movies = this.state.movies;
-        const newMovies = movies.map((item) => {
-          let movie = {...item}; 
-          movie.title = response.data.title
-          movie.watched = false
-          movie.year = response.data.release_date 
-          movie.runtime = response.data.runtime
-          movie.rating = response.data.vote_average 
-          return movie;
-        }
-        )
-        this.setState({movies: newMovies})
+  // getMovies() {
+  //   axios.get('https://api.themoviedb.org/3/movie/550?api_key=bbda037578a13e86f5992dc17d514e75')
+  //     .then((response) => {
+  //       const movies = this.state.movies;
+  //       const newMovies = movies.map((item) => {
+  //         let movie = {...item}; 
+  //         movie.title = response.data.title
+  //         movie.watched = false
+  //         movie.year = response.data.release_date 
+  //         movie.runtime = response.data.runtime
+  //         movie.rating = response.data.vote_average 
+  //         return movie;
+  //       }
+  //       )
+  //       this.setState({movies: newMovies})
+  //     })
+  //     .catch((err) => {
+  //       console.log('Error', err);
+  //     })
+  // }
+
+  getServerMovies() {
+    axios.get('/api/movies') 
+      .then( ({data}) => {
+        this.setState({movies: data})
       })
+      .catch( (err) => {
+        console.log(err);
+      })
+  }
+
+  addMovies(movie) {
+    axios.post('/api/movies', movie)
+      .then(() => 
+        this.getServerMovies()
+      )
       .catch((err) => {
-        console.log('Error', err);
+        console.log(err);
       })
   }
 
@@ -84,14 +106,14 @@ class App extends React.Component {
 
 
 
-  addMovies(event) {
-    var addedMov = this.state.movies;
-    var movie = {
-      title: event
-    };
-    addedMov.push(movie);
-    this.setState({movies: addedMov});
-  }
+  // addMovies(event) {
+  //   var addedMov = this.state.movies;
+  //   var movie = {
+  //     title: event
+  //   };
+  //   addedMov.push(movie);
+  //   this.setState({movies: addedMov});
+  // }
 
 
 
@@ -109,7 +131,7 @@ class App extends React.Component {
   onWatchedClick(event) {
     var data = this.state.movies;
     var watchedMovie = data.filter((movie) => {
-      return movie.watched === true;
+      return movie.watched === 1;
     })
 
     this.setState({watched: watchedMovie, toWatchedIsSelected: false})
@@ -120,7 +142,7 @@ class App extends React.Component {
   onToWatchedClick(event) {
     var data = this.state.movies;
     var toWatchedMovie = data.filter((movie) => {
-      return movie.watched === false;
+      return movie.watched === 0;
     })
     this.setState({toWatch: toWatchedMovie, toWatchedIsSelected: true} )
 

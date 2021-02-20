@@ -17,10 +17,10 @@ class MovieItem extends React.Component {
         var clicked = this.state.isToggleOn === 'Watched' ? 'To Watch' : 'Watched'
         this.setState({isToggleOn: clicked})
         if (clicked === 'To Watch') {
-            this.props.movie.watched = false;
+            this.props.movie.watched = 0;
         } 
         if (clicked === 'Watched') {
-            this.props.movie.watched = true;
+            this.props.movie.watched = 1;
         }
 
     }
